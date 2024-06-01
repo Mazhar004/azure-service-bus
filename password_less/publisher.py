@@ -25,6 +25,8 @@ class Publisher:
 
 
 if __name__ == "__main__":
+    logger = azure_monitor.configure_logging()
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--msg",
                         type=str,
