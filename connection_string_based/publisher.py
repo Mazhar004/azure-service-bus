@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from utils import basic_logging
 
 load_dotenv()
-CONNECTION_STR: str = os.getenv('CONNECTION_STR')
+CONNECTION_STR: str = os.getenv('CONNECTION_STR_PUBLISH')
 TOPIC_NAME: str = os.getenv('TOPIC_NAME')
 
 
