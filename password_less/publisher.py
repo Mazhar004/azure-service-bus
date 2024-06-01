@@ -53,3 +53,11 @@ if __name__ == "__main__":
                         help="If set, publish the message. Otherwise, only log.")
     args = parser.parse_args()
 
+    if args.msg:
+        publisher = Publisher(fully_qualified_namespace=FULLY_QUALIFIED_NAMESPACE,
+                              topic_name=TOPIC_NAME)
+
+        if args.pubsub:
+            asyncio.run(publisher.publish(args.msg))
+        else:
+            logger.info(f"Logging message: {args.msg}")
