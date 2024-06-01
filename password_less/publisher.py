@@ -2,7 +2,6 @@ import argparse
 import asyncio
 import logging
 import os
-from typing import Optional
 
 from azure.identity.aio import DefaultAzureCredential
 from azure.servicebus import ServiceBusMessage

@@ -1,7 +1,6 @@
 import argparse
 import os
 import time
-from typing import Any
 
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
 from azure.servicebus.exceptions import OperationTimeoutError, ServiceBusError
@@ -26,16 +25,16 @@ class Publisher:
                     self._connection_str,
                     self.topic_name)
 
-    def publish(self, data: Any) -> None:
+    def publish(self, data: str) -> None:
         with self.servicebus_client.get_topic_sender(self.topic_name) as sender:
             for attempt in range(self.max_retries):
                 try:
                     message = ServiceBusMessage(data)
                     sender.send_messages(message)
                     logger.info("Message published successfully on attempt %d", attempt + 1)
-                    
+
                     break
-                
+
                 except (ServiceBusError, OperationTimeoutError) as Err:
                     logger.warning("Attempt %d: Failed to publish message: %s", attempt + 1, Err)
 
@@ -43,7 +42,7 @@ class Publisher:
                         time.sleep(self.retry_delay)
                     else:
                         logger.error("Exceeded max retries. Failed to publish message after %d attempts.", self.max_retries)
-                        raise e
+                        raise Err
 
         logger.info("Message published: %s", data)
 

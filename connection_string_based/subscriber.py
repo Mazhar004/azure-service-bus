@@ -2,7 +2,7 @@ import logging
 import os
 import time
 
-from azure.servicebus import ServiceBusClient, ServiceBusMessage
+from azure.servicebus import ServiceBusClient
 from azure.servicebus.exceptions import OperationTimeoutError, ServiceBusError
 from dotenv import load_dotenv
 
@@ -40,7 +40,7 @@ class Subscriber:
                     if received_msgs:
                         for msg in received_msgs:
                             logger.info("Received Message from the Topic: %s", str(msg))
-                            
+
                             receiver.complete_message(msg)
                             message_found = True
 
@@ -52,7 +52,7 @@ class Subscriber:
 
                         if empty_message_count >= self.max_empty_messages:
                             logger.error("Exceeded maximum empty message count. Stopping listener.")
-                            
+
                             raise Exception("Exceeded maximum empty message count. Stopping listener.")
                 except (ServiceBusError, OperationTimeoutError) as Err:
                     logger.error("Failed to receive messages: %s", Err)
@@ -61,7 +61,7 @@ class Subscriber:
                 if not message_found:
                     # Sleep for the defined polling frequency before checking for messages again
                     logger.info("Sleeping for %d seconds before next poll.",
-                                 self.pulling_frequency)
+                                self.pulling_frequency)
                     time.sleep(self.pulling_frequency)
 
 
@@ -77,4 +77,4 @@ if __name__ == "__main__":
     try:
         subscriber.receive_messages()
     except Exception as Err:
-        subscriber.logger.error("Listener stopped due to an error: %s", Err)
+        logger.error("Listener stopped due to an error: %s", Err)
