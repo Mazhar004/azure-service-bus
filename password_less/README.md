@@ -1,4 +1,4 @@
-# Azure Service Bus Publisher and Subscriber
+# Azure Service Bus Publisher and Subscriber (Password Less)
 
 This project demonstrates how to use Azure Service Bus to `publish` and `subscribe` to messages using `passwordless authentication`.
 
@@ -80,7 +80,7 @@ export PYTHONPATH=$PYTHONPATH:/path/to/your/azure_databus
 #### Publisher
 To publish a message, run the following command:
 ```bash
-python publisher.py --msg "Your message here"
+python publisher.py --msg "Your message here" --pubsub
 ```
 
 #### Subscriber

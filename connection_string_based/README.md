@@ -1,4 +1,4 @@
-# Azure Service Bus Publisher and Subscriber
+# Azure Service Bus Publisher and Subscriber (Connection String Based)
 
 This project demonstrates how to use Azure Service Bus to publish and subscribe to messages using a `connection string`.
 
