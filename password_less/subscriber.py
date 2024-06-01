@@ -64,3 +64,8 @@ class Subscriber:
             await self.credential.close()
 
 
+if __name__ == "__main__":
+    azure_monitor.configure_logging()
+
+    subscriber = Subscriber()
+    asyncio.run(subscriber.run())
