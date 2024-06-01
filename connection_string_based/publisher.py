@@ -1,5 +1,4 @@
 import argparse
-import logging
 import os
 import time
 from typing import Any
@@ -8,8 +7,7 @@ from azure.servicebus import ServiceBusClient, ServiceBusMessage
 from azure.servicebus.exceptions import OperationTimeoutError, ServiceBusError
 from dotenv import load_dotenv
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from utils import basic_logging
 
 load_dotenv()
 CONNECTION_STR: str = os.getenv('CONNECTION_STR')
@@ -24,6 +22,9 @@ class Publisher:
         self.retry_delay = retry_delay
 
         self.servicebus_client = ServiceBusClient.from_connection_string(conn_str=self._connection_str)
+        logger.info("Publisher initialized with connection string: %s and topic name: %s",
+                    self._connection_str,
+                    self.topic_name)
 
     def publish(self, data: Any) -> None:
         with self.servicebus_client.get_topic_sender(self.topic_name) as sender:
@@ -32,20 +33,24 @@ class Publisher:
                     message = ServiceBusMessage(data)
                     sender.send_messages(message)
                     logger.info("Message published successfully on attempt %d", attempt + 1)
-                    break
-                except (ServiceBusError, OperationTimeoutError) as e:
-                    logger.warning("Attempt %d: Failed to publish message: %s", attempt + 1, e)
                     
+                    break
+                
+                except (ServiceBusError, OperationTimeoutError) as Err:
+                    logger.warning("Attempt %d: Failed to publish message: %s", attempt + 1, Err)
+
                     if attempt < self.max_retries - 1:
                         time.sleep(self.retry_delay)
                     else:
                         logger.error("Exceeded max retries. Failed to publish message after %d attempts.", self.max_retries)
                         raise e
 
-        print("Message published.")
+        logger.info("Message published: %s", data)
 
 
 if __name__ == "__main__":
+    logger = basic_logging.configure_logging()
+
     parser = argparse.ArgumentParser(description="Publish a message to a Service Bus topic.")
     parser.add_argument("--msg",
                         type=str,
