@@ -68,3 +68,16 @@ class Subscriber:
                     time.sleep(self.pulling_frequency)
 
 
+if __name__ == "__main__":
+    logger = basic_logging.configure_logging()
+
+    subscriber = Subscriber(connection_str=CONNECTION_STR,
+                            topic_name=TOPIC_NAME,
+                            subscription_name=SUBSCRIPTION_NAME,
+                            pulling_frequency=PULLING_FREQUENCY,
+                            max_empty_messages=MAX_EMPTY_MESSAGES)
+
+    try:
+        subscriber.receive_messages()
+    except Exception as Err:
+        subscriber.logger.error("Listener stopped due to an error: %s", e)
