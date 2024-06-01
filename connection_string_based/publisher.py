@@ -10,19 +10,18 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 load_dotenv()
-connection_str = os.getenv('CONNECTION_STR')
-topic_name = os.getenv('TOPIC_NAME')
-max_retries = 3
-
-servicebus_client = ServiceBusClient.from_connection_string(conn_str=connection_str)
+CONNECTION_STR = os.getenv('CONNECTION_STR')
+TOPIC_NAME = os.getenv('TOPIC_NAME')
 
 class Publisher:
-    def __init__(self, servicebus_client, topic_name, max_retries=3, retry_delay=5):
-        self.servicebus_client = servicebus_client
+    def __init__(self, connection_str, topic_name, max_retries=3, retry_delay=5):
+        self._connection_str = connection_str
         self.topic_name = topic_name
         self.max_retries = max_retries
         self.retry_delay = retry_delay
 
+        self.servicebus_client = ServiceBusClient.from_connection_string(conn_str=self._connection_str)
+        
     def publish(self, data):
         with self.servicebus_client.get_topic_sender(self.topic_name) as sender:
             for attempt in range(self.max_retries):
@@ -42,5 +41,11 @@ class Publisher:
         print("Message published.")
 
 
-publisher = Publisher(servicebus_client, topic_name)
-publisher.publish(data)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Publish a message to a Service Bus topic.")
+    parser.add_argument("--msg", type=str, required=True, help="The message to publish.")
+    
+    args = parser.parse_args()
+    
+    publisher = Publisher(CONNECTION_STR, TOPIC_NAME)
+    publisher.publish(args.msg)
