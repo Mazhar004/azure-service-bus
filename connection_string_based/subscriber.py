@@ -33,18 +33,15 @@ class Subscriber:
 
         with self.servicebus_client.get_subscription_receiver(self.topic_name, self.subscription_name) as receiver:
             while True:
-                message_found = False
                 try:
                     received_msgs = receiver.receive_messages(max_message_count=10,
                                                               max_wait_time=5)
                     if received_msgs:
+                        empty_message_count = 0  # Reset counter on receiving messages
                         for msg in received_msgs:
                             logger.info("Received Message from the Topic: %s", str(msg))
 
                             receiver.complete_message(msg)
-                            message_found = True
-
-                        empty_message_count = 0  # Reset counter on receiving messages
                     else:
                         empty_message_count += 1
                         logger.info("No messages received. Empty message count: %d",
@@ -58,7 +55,7 @@ class Subscriber:
                     logger.error("Failed to receive messages: %s", Err)
                     raise
 
-                if not message_found:
+                if not received_msgs:
                     # Sleep for the defined polling frequency before checking for messages again
                     logger.info("Sleeping for %d seconds before next poll.",
                                 self.pulling_frequency)
