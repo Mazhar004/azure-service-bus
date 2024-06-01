@@ -1,6 +1,7 @@
-# Azure Service Bus Publisher and Subscriber (Connection String Based)
+# Azure Service Bus Publisher and Subscriber (Password Less)
 
-This project demonstrates how to use Azure Service Bus to publish and subscribe to messages using a `connection string`.
+This project demonstrates how to use Azure Service Bus to `publish` and `subscribe` to messages using `passwordless authentication`.
+
 
 ## Getting Started
 
@@ -20,7 +21,7 @@ This project demonstrates how to use Azure Service Bus to publish and subscribe 
 2. `Navigate` to the project directory:
 
     ```bash
-    cd azure_databus/connection_string_based/
+    cd azure_databus/password_less/
     ```
 
 3. Create a `virtual` environment:
@@ -42,14 +43,29 @@ This project demonstrates how to use Azure Service Bus to publish and subscribe 
     ```bash
     pip install -r requirements.txt
     ```
+7. Install `Azure CLI`:
 
+    For `Linux`:
+
+    - Follow the guidline [Link](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt)
+
+    For `macOS`:
+
+    ```bash
+    brew update && brew install azure-cli
+    ```
+
+8. Login to `Azure`:
+
+    ```bash
+    az login
+    ```
 ### Configuration
-Create a `.env` file in the root of your project & insert your `connection string`, `topic name` & `subscription name`.
+Create a `.env` file in the root of your project & insert your `fully qualified namespace`, `topic name` & `subscription name`.
 
 Here's an example:
 ```env
-CONNECTION_STR_PUBLISH = 'your_publish_connection_string_name'
-CONNECTION_STR_LISTEN = 'your_listen_connection_string_name'
+FULLY_QUALIFIED_NAMESPACE = 'yout_data_bus_name.servicebus.windows.net'
 TOPIC_NAME = 'your_topic_name'
 SUBSCRIPTION_NAME = 'your_topic_subscription_name'
 ```
@@ -64,7 +80,7 @@ export PYTHONPATH=$PYTHONPATH:/path/to/your/azure_databus
 #### Publisher
 To publish a message, run the following command:
 ```bash
-python publisher.py --msg "Your message here"
+python publisher.py --msg "Your message here" --pubsub
 ```
 
 #### Subscriber
