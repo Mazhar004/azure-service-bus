@@ -23,3 +23,15 @@ class Publisher:
         self.topic_name = topic_name
         self.credential = DefaultAzureCredential()
 
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--msg",
+                        type=str,
+                        required=True,
+                        help="The message to publish.")
+    parser.add_argument("--pubsub",
+                        action="store_true",
+                        help="If set, publish the message. Otherwise, only log.")
+    args = parser.parse_args()
+
