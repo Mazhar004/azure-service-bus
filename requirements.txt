@@ -1,3 +1,5 @@
 azure-servicebus
 azure-identity
 python-dotenv
+python-json-logger
+aiohttp
