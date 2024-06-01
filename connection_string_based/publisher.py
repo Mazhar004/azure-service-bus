@@ -13,3 +13,8 @@ load_dotenv()
 connection_str = os.getenv('CONNECTION_STR')
 topic_name = os.getenv('TOPIC_NAME')
 max_retries = 3
+
+servicebus_client = ServiceBusClient.from_connection_string(conn_str=connection_str)
+
+retry_delay = 5
+
