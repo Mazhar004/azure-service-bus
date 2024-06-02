@@ -4,6 +4,7 @@ import logging
 from message import TopicMessageReceiverStrategy
 
 from utils import (ServiceBusSubscriber,
+                   configure_logging,
                    namespace_name,
                    string_message_handler,
                    subscription_name,
@@ -22,7 +23,7 @@ def main():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    configure_logging()
     logging.getLogger('azure').setLevel(logging.WARNING)
+
     main()

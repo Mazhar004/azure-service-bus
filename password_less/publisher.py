@@ -7,7 +7,10 @@ from azure.identity.aio import DefaultAzureCredential
 from message import TopicMessageSenderStrategy
 
 # Customs
-from utils import ServiceBusPublisher, namespace_name, topic_name
+from utils import (ServiceBusPublisher,
+                   configure_logging,
+                   namespace_name,
+                   topic_name)
 
 publisher = ServiceBusPublisher(namespace=namespace_name(),
                                 queue_or_topic_name=topic_name(),
@@ -38,7 +41,7 @@ def main():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    configure_logging()
     logging.getLogger('azure').setLevel(logging.WARNING)
+
     main()
