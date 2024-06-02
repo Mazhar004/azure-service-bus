@@ -16,12 +16,12 @@ This project demonstrates how to use Azure Service Bus to `publish` and `subscri
 1. `Clone` the repository:
 
     ```bash
-    git clone https://github.com/Mazhar004/azure_databus.git
+    git clone https://github.com/Mazhar004/azure-service-bus-pub-sub.git
     ```
 2. `Navigate` to the project directory:
 
     ```bash
-    cd azure_databus/password_less/
+    cd azure-service-bus-pub-sub/password_less/
     ```
 
 3. Create a `virtual` environment:
@@ -71,9 +71,9 @@ SUBSCRIPTION_NAME = 'your_topic_subscription_name'
 ```
 
 
-Before running the project, add the project directory to your `PYTHONPATH`:
+Before running the project, make sure you are in sub-project directory:
 ```bash
-export PYTHONPATH=$PYTHONPATH:/path/to/your/azure_databus
+azure-service-bus-pub-sub/password_less/
 ```
 
 ### Usage
