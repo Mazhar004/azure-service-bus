@@ -11,11 +11,12 @@ from auth import namespace_name, topic_name
 from pubsub_utils import ServiceBusPublisher
 
 
-publisher = ServiceBusPublisher(namespace=namespace_name(),
-                                queue_or_topic_name=topic_name(),
-                                strategy=TopicMessageSenderStrategy)
+async def publish_message(message: str) -> None:
+    await publisher.send_message([message, message])
+    logging.info("Message was published successfully.")
 
 
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--msg",
                         type=str,
@@ -27,10 +28,15 @@ publisher = ServiceBusPublisher(namespace=namespace_name(),
     args = parser.parse_args()
 
     if args.msg:
-        publisher = Publisher(fully_qualified_namespace=FULLY_QUALIFIED_NAMESPACE,
-                              topic_name=TOPIC_NAME)
+        publisher = ServiceBusPublisher(namespace=namespace_name(),
+                                        queue_or_topic_name=topic_name(),
+                                        strategy=TopicMessageSenderStrategy)
 
         if args.pubsub:
-            asyncio.run(publisher.publish(args.msg))
+            asyncio.run(publish_message(args.msg))
         else:
-            logger.info(f"Logging message: {args.msg}")
+            logging.info(f"Logging message: {args.msg}")
+
+
+if __name__ == "__main__":
+    main()
