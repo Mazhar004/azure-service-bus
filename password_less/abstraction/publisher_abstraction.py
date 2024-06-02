@@ -17,7 +17,7 @@ class MessageSenderStrategy(ABC):
         """Send a single message."""
         message = ServiceBusMessage(message_content)
         await sender.send_messages(message)
-        logging.info("Sent a single message")
+        logging.info(f"Sent a single {message_content=}")
 
     async def send_batch_message(self, sender: ServiceBusSender, message_list: List[str]) -> None:
         """Send a batch of messages."""
@@ -33,7 +33,7 @@ class MessageSenderStrategy(ABC):
                     batch_message = await sender.create_message_batch()
                     batch_message.add_message(ServiceBusMessage(msg))
             await sender.send_messages(batch_message)
-        logging.info(f"Sent a list of {len(message_list)} messages")
+        logging.info(f"Sent a list of {len(message_list)} {message_list=}")
 
 
 class QueueMessageSenderStrategy(MessageSenderStrategy):
