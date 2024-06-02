@@ -15,7 +15,7 @@ publisher = ServiceBusPublisher(namespace=namespace_name(),
 
 
 async def publish_message(message: str) -> None:
-    await publisher.send_message([message, message])
+    await publisher.send_message(message)
     logging.info("Message was published successfully.")
 
 
