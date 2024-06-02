@@ -41,6 +41,6 @@ def main():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')  # Set logging level to INFO and add format
-
+                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.getLogger('azure').setLevel(logging.WARNING)
     main()
