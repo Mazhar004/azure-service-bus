@@ -88,3 +88,39 @@ To start the subscriber, run the following command:
 ```bash
 python subscriber.py
 ```
+
+### To RUN in Docker
+### Configuration
+Create a `.env` file in the root of your project & insert your `fully qualified namespace`, `topic name` & `subscription name`.
+
+Here's an example:
+```env
+FULLY_QUALIFIED_NAMESPACE = 'yout_data_bus_name.servicebus.windows.net'
+TOPIC_NAME = 'your_topic_name'
+SUBSCRIPTION_NAME = 'your_topic_subscription_name'
+
+# APP registration for Docker RUN
+# Set environment variables for Azure Service Bus credentials
+AZURE_CLIENT_ID= 'your_app_id'
+AZURE_CLIENT_SECRET= 'your_client_secret'
+AZURE_TENANT_ID= 'your_tenant_id'
+```
+
+### Build Image
+- Subcriber
+    ```bash
+    docker build -t subscriber_tag_name .
+    ```
+- Publisher
+    ```bash
+    docker build -t publisher_tag_name . -f dockerfile_publisher
+    ```  
+### Run Image
+- Subcriber
+    ```bash
+    docker run subscriber_tag_name python subscriber.py
+    ```
+- Publisher
+    ```bash
+    docker run publisher_tag_name python publisher.py --msg "your msg" --pubsub
+    ```  

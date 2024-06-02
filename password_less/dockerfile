@@ -17,8 +17,8 @@ FROM python:3.11-slim
 RUN set -ex \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-        dumb-init \
-        git \
+    dumb-init \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory in the container
@@ -40,6 +40,3 @@ COPY .env .
 RUN chmod +x subscriber.py
 
 ENTRYPOINT ["dumb-init"]
-
-## Running Example
-# docker run image_name python subscriber.py
