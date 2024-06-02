@@ -4,12 +4,10 @@ import logging
 
 # Azure
 from azure.identity.aio import DefaultAzureCredential
+from message import TopicMessageSenderStrategy
 
 # Customs
-from abstraction import TopicMessageSenderStrategy
-from auth import namespace_name, topic_name
-from pubsub_utils import ServiceBusPublisher
-
+from utils import ServiceBusPublisher, namespace_name, topic_name
 
 publisher = ServiceBusPublisher(namespace=namespace_name(),
                                 queue_or_topic_name=topic_name(),

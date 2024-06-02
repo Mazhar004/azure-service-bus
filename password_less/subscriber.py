@@ -1,11 +1,12 @@
 import asyncio
 import logging
 
-from abstraction import TopicMessageReceiverStrategy
-from auth import namespace_name, subscription_name, topic_name
-from pubsub_utils import ServiceBusSubscriber
+from message import TopicMessageReceiverStrategy
 
-from utils import string_message_handler
+from utils import (ServiceBusPublisher,
+                   namespace_name,
+                   string_message_handler,
+                   subscription_name, topic_name)
 
 subscriber = ServiceBusSubscriber(namespace=namespace_name(),
                                   queue_or_topic_name=topic_name(),
