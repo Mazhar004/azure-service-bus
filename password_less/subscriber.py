@@ -3,10 +3,11 @@ import logging
 
 from message import TopicMessageReceiverStrategy
 
-from utils import (ServiceBusPublisher,
+from utils import (ServiceBusSubscriber,
                    namespace_name,
                    string_message_handler,
-                   subscription_name, topic_name)
+                   subscription_name,
+                   topic_name)
 
 subscriber = ServiceBusSubscriber(namespace=namespace_name(),
                                   queue_or_topic_name=topic_name(),

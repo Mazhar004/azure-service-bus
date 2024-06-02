@@ -1,10 +1,11 @@
+import asyncio
 import logging
 from abc import ABC, abstractmethod
 from typing import Callable, Optional
 
 from azure.servicebus import ServiceBusReceivedMessage
 from azure.servicebus.aio import ServiceBusClient, ServiceBusReceiver
-import asyncio
+
 
 class MessageReceiverStrategy(ABC):
     @abstractmethod

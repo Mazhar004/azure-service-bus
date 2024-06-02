@@ -1,4 +1,5 @@
 from typing import Dict
+
 from azure.identity.aio import DefaultAzureCredential
 from azure.servicebus.aio import ServiceBusClient
 

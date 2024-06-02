@@ -1,11 +1,8 @@
 from typing import Callable, List, Union
 
+from azure.servicebus import ServiceBusReceivedMessage
 from client import ServiceBusClientFactory
 from message import MessageReceiverStrategy, MessageSenderStrategy
-
-
-from azure.identity.aio import DefaultAzureCredential
-from azure.servicebus import ServiceBusReceivedMessage
 
 
 class ServiceBusPublisher:
