@@ -1,0 +1,1 @@
+from .custom_msg_process import string_message_handler
