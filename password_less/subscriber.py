@@ -59,7 +59,7 @@ class Subscriber:
 
 
 if __name__ == "__main__":
-    logger = azure_monitor.configure_logging()
-
-    subscriber = Subscriber()
-    asyncio.run(subscriber.run())
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.getLogger('azure').setLevel(logging.WARNING)
+    main()
