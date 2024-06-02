@@ -61,7 +61,8 @@ This project demonstrates how to use Azure Service Bus to `publish` and `subscri
     az login
     ```
 ### Configuration
-Create a `.env` file in the root of your project & insert your `fully qualified namespace`, `topic name` & `subscription name`.
+Create a `.env` file in the root of your project & insert your secrets.
+- `azure-service-bus-pub-sub/password_less/.env`
 
 Here's an example:
 ```env
@@ -91,7 +92,8 @@ python subscriber.py
 
 ### To RUN in Docker
 ### Configuration
-Create a `.env` file in the root of your project & insert your `fully qualified namespace`, `topic name` & `subscription name`.
+Create a `.env` file in the root of your project & insert your secrets.
+- `azure-service-bus-pub-sub/password_less/.env`
 
 Here's an example:
 ```env
@@ -113,7 +115,7 @@ AZURE_TENANT_ID= 'your_tenant_id'
     ```
 - Publisher
     ```bash
-    docker build -t publisher_tag_name . -f dockerfile_publisher
+    docker build -t publisher_tag_name . -f Dockerfile_Publisher
     ```  
 ### Run Image
 - Subcriber
