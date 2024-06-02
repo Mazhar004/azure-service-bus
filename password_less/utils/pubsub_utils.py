@@ -1,12 +1,12 @@
 from typing import Callable, List, Union
 
-from abstraction import (MessageReceiverStrategy,
-                         MessageSenderStrategy,
-                         ServiceBusClientFactory)
+from client import ServiceBusClientFactory
+from message import MessageReceiverStrategy, MessageSenderStrategy
 
 
 from azure.identity.aio import DefaultAzureCredential
 from azure.servicebus import ServiceBusReceivedMessage
+
 
 class ServiceBusPublisher:
     def __init__(self, namespace: str, queue_or_topic_name: str, strategy: MessageSenderStrategy) -> None:
@@ -30,7 +30,7 @@ class ServiceBusSubscriber:
     def __init__(self, namespace: str, queue_or_topic_name: str, strategy: MessageReceiverStrategy) -> None:
         self.namespace = namespace
         self.queue_or_topic_name = queue_or_topic_name
-        
+
         self.client = None
         self.strategy: MessageReceiverStrategy = strategy()
 
@@ -43,7 +43,6 @@ class ServiceBusSubscriber:
 
         async with self.client:
             await self.strategy.subscribing_messages(client=self.client,
-                                               name=self.queue_or_topic_name,
-                                               message_handler=message_handler,
-                                               subscription_name=subscription_name)
-        
+                                                     name=self.queue_or_topic_name,
+                                                     message_handler=message_handler,
+                                                     subscription_name=subscription_name)
