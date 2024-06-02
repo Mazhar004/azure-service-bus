@@ -36,3 +36,25 @@ class MessageSenderStrategy(ABC):
         logging.info(f"Sent a list of {len(message_list)} messages")
 
 
+class QueueMessageSenderStrategy(MessageSenderStrategy):
+    async def send_message(self, client: ServiceBusClient, name: str, message_content: Union[str, List[str]]) -> None:
+        """Send a message or a list of messages to a queue."""
+        async with client.get_queue_sender(queue_name=name) as sender:
+            logging.info("Sending.. message to queue")
+
+            if isinstance(message_content, List):
+                await self.send_batch_message(sender, message_content)
+            else:
+                await self.send_single_message(sender, message_content)
+
+
+class TopicMessageSenderStrategy(MessageSenderStrategy):
+    async def send_message(self, client: ServiceBusClient, name: str, message_content: Union[str, List[str]]) -> None:
+        """Send a message or a list of messages to a topic."""
+        async with client.get_topic_sender(topic_name=name) as sender:
+            logging.info("Sending.. message to topic")
+
+            if isinstance(message_content, List):
+                await self.send_batch_message(sender, message_content)
+            else:
+                await self.send_single_message(sender, message_content)
