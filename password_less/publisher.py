@@ -7,25 +7,24 @@ from message import TopicMessageSenderStrategy
 
 from utils import (ServiceBusPublisher,
                    configure_logging,
-                   connection_str,
                    namespace_name,
                    topic_name)
 
-# Connection String Based Publisher
-PUBLISHER = ServiceBusPublisher(namespace=namespace_name(),
-                                strategy=TopicMessageSenderStrategy,
-                                connection_str=connection_str())
+# Connection String Based Publisher If It Set to True
+USE_CONNECTION_STR = False
 
-# Password Less Publisher with Default Azure Login
-# PUBLISHER = ServiceBusPublisher(namespace=namespace_name(),
-#                                 strategy=TopicMessageSenderStrategy)
 TOPIC = topic_name()
+NAMESPACE = namespace_name()
+
+PUBLISHER = ServiceBusPublisher(namespace=NAMESPACE,
+                                strategy=TopicMessageSenderStrategy,
+                                use_connection_str=USE_CONNECTION_STR)
 
 
 async def publish_message(message: str) -> None:
     await PUBLISHER.send_message(queue_or_topic_name=TOPIC,
                                  message_content=message)
-    logging.info("Message was published successfully.")
+    logging.info(f"Message was published successfully in the {TOPIC=}")
 
     if isinstance(PUBLISHER.factory_object, ServiceBusClientFactory):
         await PUBLISHER.factory_object._credential.close()
