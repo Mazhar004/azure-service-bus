@@ -1,7 +1,4 @@
-import enum
-import json
 import logging
-import os
 
 from pythonjsonlogger import jsonlogger
 
