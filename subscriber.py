@@ -11,8 +11,8 @@ from utils import (ServiceBusSubscriber,
                    subscription_name,
                    topic_name)
 
-# Connection String Based Publisher If It Set to True Otherwise Default Azure Login
-USE_CONNECTION_STR = False
+# Connection String Based Publisher If It Set to True Otherwise Use Default Azure Login
+USE_CONNECTION_STR = True
 
 NAMESPACE = namespace_name()
 TOPIC = topic_name()

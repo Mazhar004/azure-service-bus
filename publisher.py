@@ -10,8 +10,8 @@ from utils import (ServiceBusPublisher,
                    namespace_name,
                    topic_name)
 
-# Connection String Based Publisher If It Set to True
-USE_CONNECTION_STR = False
+# Connection String Based Publisher If It Set to True Otherwise Use Default Azure Login
+USE_CONNECTION_STR = True
 
 TOPIC = topic_name()
 NAMESPACE = namespace_name()
