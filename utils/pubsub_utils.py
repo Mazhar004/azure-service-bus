@@ -41,8 +41,7 @@ class ServiceBusSubscriber:
 
         if self.use_connection_str:
             logging.info("Using Connection String")
-            self.factory_object = ServiceBusClientFactoryString(
-                connection_str=connection_str())
+            self.factory_object = ServiceBusClientFactoryString(connection_str=connection_str())
         else:
             logging.info("Using Default Azure Login")
             self.factory_object = ServiceBusClientFactory()
