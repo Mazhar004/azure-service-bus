@@ -1,25 +1,31 @@
+import logging
 from typing import Callable, List, Union
 
 from azure.servicebus import ServiceBusReceivedMessage
-from client import ServiceBusClientFactory
+from client import ServiceBusClientFactory, ServiceBusClientFactoryString
 from message import MessageReceiverStrategy, MessageSenderStrategy
 
 
 class ServiceBusPublisher:
-    def __init__(self, namespace: str, queue_or_topic_name: str, strategy: MessageSenderStrategy) -> None:
+    def __init__(self, namespace: str, strategy: MessageSenderStrategy, connection_str: str = '') -> None:
         self.namespace = namespace
-        self.queue_or_topic_name = queue_or_topic_name
+        self.connection_str = connection_str
+
+        if self.connection_str:
+            self.factory_object = ServiceBusClientFactoryString(connection_str=self.connection_str)
+        else:
+            self.factory_object = ServiceBusClientFactory()
 
         self.client = None
         self.strategy: MessageSenderStrategy = strategy()
 
-    async def send_message(self, message_content: Union[str, List[str]]) -> None:
-        if self.client is None:
-            self.client = await ServiceBusClientFactory.get_client(namespace=self.namespace)
+    async def send_message(self, queue_or_topic_name: str, message_content: Union[str, List[str]]) -> None:
+        self.client = await self.factory_object.get_client(namespace=self.namespace)
 
         async with self.client:
+            logging.info(f"Sending message to {queue_or_topic_name}")
             await self.strategy.send_message(client=self.client,
-                                             name=self.queue_or_topic_name,
+                                             name=queue_or_topic_name,
                                              message_content=message_content)
 
 
