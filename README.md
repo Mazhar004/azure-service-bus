@@ -1,16 +1,112 @@
 # Azure Service Bus Publisher and Subscriber
 
-This project demonstrates how to use Azure Service Bus to publish and subscribe to messages. There are two different implementations available:
-
-1. [Connection String Based Implementation](connection_string_based/README.md)
-2. [Passwordless Authentication Implementation](password_less/README.md)
-
-Each implementation has its own set of prerequisites, installation instructions, and usage guidelines. Please refer to the respective README files for more details.
+This project demonstrates how to use Azure Service Bus to `publish` and `subscribe` the messages using two different method:
+-  `connection_string_based`
+-   `passwordless authentication`.
 
 
-## Usage
+## Getting Started
 
-Refer to the respective README files of the [Connection String Based Implementation](connection_string_based/README.md) and [Passwordless Authentication Implementation](password_less/README.md) for usage instructions.
+### Prerequisites
+
+- Python `3.8` or higher
+- `pip` (Python package installer)
+- An `Azure account` with an active subscription
+
+### Installation 
+ `Clone` the repository:
+
+```bash
+git clone https://github.com/Mazhar004/azure-service-bus-pub-sub.git
+```
+
+### Configuration
+Create a `.env` file in the root of your project & insert your secrets. Here's an example:
+```env
+FULLY_QUALIFIED_NAMESPACE = 'YOUR_SERVICE_BUS_NAME.servicebus.windows.net'
+
+# Required Connection String Based Configuration
+CONNECTION_STR = ""
+
+# Required for Password Less Configuration
+AZURE_CLIENT_ID=""
+AZURE_CLIENT_SECRET=""
+AZURE_TENANT_ID=""
+```
+
+#### Virtual Environment Based Setup 
+1. Create a `virtual` environment:
+    ```bash
+    python3 -m venv venv
+    ```
+2. Activate the `virtual` environment:
+   - On `Unix` or `MacOS`:
+
+        ```bash
+        source venv/bin/activate
+        ```
+3. Upgrade `pip`:
+    ```bash
+    pip install --upgrade pip setuptools
+    ```
+
+4. `Install` the required packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
+5. Install `Azure CLI`:
+
+    For `Linux`:
+
+    - Follow the guidline [Link](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt)
+
+    For `macOS`:
+
+    ```bash
+    brew update && brew install azure-cli
+    ```
+
+7. Login to `Azure`:
+
+    ```bash
+    az login
+    ```
+
+### Usage
+#### Publisher
+To publish a message, run the following command:
+```bash
+python publisher.py --msg "Your message here" --pubsub
+```
+
+#### Subscriber
+To start the subscriber, run the following command:
+```bash
+python subscriber.py
+```
+
+### To RUN with Docker
+### Configuration
+- Create a `.env` file in the root of your project & insert your secrets [Sample Configuration](#configuration)
+
+### Build Image
+- Subcriber
+    ```bash
+    docker build -t subscriber_tag_name .
+    ```
+- Publisher
+    ```bash
+    docker build -t publisher_tag_name . -f Dockerfile_Publisher
+    ```  
+### Run Image
+- Subcriber
+    ```bash
+    docker run subscriber_tag_name python subscriber.py
+    ```
+- Publisher
+    ```bash
+    docker run publisher_tag_name python publisher.py --msg "your msg" --pubsub
+    ```  
 
 ## License
 

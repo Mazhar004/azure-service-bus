@@ -30,4 +30,4 @@ COPY publisher.py .
 COPY .env .
 
 # Command to run the application
-CMD ["python", "publisher.py", "--msg", "Hello, World!", "--pubsub"]
+CMD ["python", "publisher.py", "--msg", "Hello, World!"]
