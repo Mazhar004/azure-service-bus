@@ -17,7 +17,7 @@ class MessageSenderStrategy(ABC):
         """Send a single message."""
         message = ServiceBusMessage(message_content)
         await sender.send_messages(message)
-        logging.info(f"Sent a single")
+        logging.info(f"Sent a single message.")
 
     async def send_batch_message(self, sender: ServiceBusSender, message_list: List[str]) -> None:
         """Send a batch of messages."""
