@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def connection_str():
+    return os.getenv('CONNECTION_STR')
+
+
 def namespace_name():
     return os.getenv('FULLY_QUALIFIED_NAMESPACE')
 
