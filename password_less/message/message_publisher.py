@@ -17,35 +17,29 @@ class MessageSenderStrategy(ABC):
         """Send a single message."""
         message = ServiceBusMessage(message_content)
         await sender.send_messages(message)
-        logging.info(f"Sent a single {message_content=}")
+        logging.info(f"Sent a single")
 
     async def send_batch_message(self, sender: ServiceBusSender, message_list: List[str]) -> None:
         """Send a batch of messages."""
+        MAX_BATCH_SIZE = 256 * 1024
         async with sender:
-            batch_message = await sender.create_message_batch()
+            batch_message = await sender.create_message_batch(max_size_in_bytes=MAX_BATCH_SIZE)
+
             for msg in message_list:
+                message = ServiceBusMessage(msg)
                 try:
-                    batch_message.add_message(ServiceBusMessage(msg))
+                    batch_message.add_message(message)
                 except MessageSizeExceededError:
-                    # ServiceBusMessageBatch object reaches max_size.
                     logging.info(f"Batch message is full. Sending..")
                     await sender.send_messages(batch_message)
-                    batch_message = await sender.create_message_batch()
-                    batch_message.add_message(ServiceBusMessage(msg))
-            await sender.send_messages(batch_message)
-        logging.info(f"Sent a list of {len(message_list)} {message_list=}")
 
+                    batch_message = await sender.create_message_batch(max_size_in_bytes=MAX_BATCH_SIZE)
+                    batch_message.add_message(message)
 
-class QueueMessageSenderStrategy(MessageSenderStrategy):
-    async def send_message(self, client: ServiceBusClient, name: str, message_content: Union[str, List[str]]) -> None:
-        """Send a message or a list of messages to a queue."""
-        async with client.get_queue_sender(queue_name=name) as sender:
-            logging.info("Sending.. message to queue")
+            if len(batch_message) > 0:
+                await sender.send_messages(batch_message)
 
-            if isinstance(message_content, List):
-                await self.send_batch_message(sender, message_content)
-            else:
-                await self.send_single_message(sender, message_content)
+        logging.info(f"Sent batche message, total {len(message_list)} messgaes.")
 
 
 class TopicMessageSenderStrategy(MessageSenderStrategy):

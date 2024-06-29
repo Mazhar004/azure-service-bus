@@ -1,1 +1,1 @@
-from .client_abstraction import ServiceBusClientFactory
+from .client_abstraction import ServiceBusClientFactory, ServiceBusClientFactoryString

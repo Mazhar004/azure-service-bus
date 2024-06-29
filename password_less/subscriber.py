@@ -3,6 +3,7 @@ import logging
 
 from message import TopicMessageReceiverStrategy
 
+from client import ServiceBusClientFactory
 from utils import (ServiceBusSubscriber,
                    configure_logging,
                    namespace_name,
@@ -10,20 +11,29 @@ from utils import (ServiceBusSubscriber,
                    subscription_name,
                    topic_name)
 
-subscriber = ServiceBusSubscriber(namespace=namespace_name(),
-                                  queue_or_topic_name=topic_name(),
-                                  strategy=TopicMessageReceiverStrategy)
+# Connection String Based Publisher If It Set to True Otherwise Default Azure Login
+USE_CONNECTION_STR = False
+
+NAMESPACE = namespace_name()
+TOPIC = topic_name()
+SUBSCRIPTION_NAME = subscription_name()
+
+SUBSCRIBER = ServiceBusSubscriber(namespace=NAMESPACE,
+                                  queue_or_topic_name=TOPIC,
+                                  strategy=TopicMessageReceiverStrategy,
+                                  use_connection_str=USE_CONNECTION_STR)
 
 
-def main():
-    asyncio.run(subscriber.start_listening(message_handler=string_message_handler,
-                                           subscription_name=subscription_name()
-                                           )
-                )
+async def main():
+    await SUBSCRIBER.start_listening(message_handler=string_message_handler,
+                               subscription_name=SUBSCRIPTION_NAME)
+    if isinstance(SUBSCRIBER.factory_object, ServiceBusClientFactory):
+        await SUBSCRIBER.factory_object._credential.close()
+    
 
 
 if __name__ == "__main__":
     configure_logging()
     logging.getLogger('azure').setLevel(logging.WARNING)
 
-    main()
+    asyncio.run(main())

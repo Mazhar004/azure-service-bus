@@ -19,14 +19,18 @@ class MessageReceiverStrategy(ABC):
     async def process_messages(self, receiver: ServiceBusReceiver,
                                message_handler: Callable[[ServiceBusReceivedMessage], None],
                                source: str) -> None:
+        # Built-in Constants
+        MAX_MESSAGE_COUNT = 20
+        MAX_WAIT_TIME = 5
+
+        # Custom Constants
         EMPTY_MESSAGES_THRESHOLD = 10
         PULLING_FREQUENCY_SECONDS = 5
 
         empty_messages_count = 0
-
         while True:
-            received_msgs = await receiver.receive_messages(max_wait_time=5,
-                                                            max_message_count=20)
+            received_msgs = await receiver.receive_messages(max_message_count=MAX_MESSAGE_COUNT,
+                                                            max_wait_time=MAX_WAIT_TIME)
             if received_msgs:
                 for msg in received_msgs:
                     await message_handler(msg)
@@ -46,26 +50,16 @@ class MessageReceiverStrategy(ABC):
             await asyncio.sleep(PULLING_FREQUENCY_SECONDS)
 
 
-class QueueMessageReceiverStrategy(MessageReceiverStrategy):
-    async def subscribing_messages(self,
-                                   client: ServiceBusClient,
-                                   name: str,
-                                   message_handler: Callable[[ServiceBusReceivedMessage], None],
-                                   subscription_name: Optional[str] = None) -> None:
-        async with client.get_queue_receiver(queue_name=name,
-                                             max_wait_time=5) as receiver:
-            logging.info("Listening.. to queue")
-            await self.process_messages(receiver, message_handler, "queue")
-
-
 class TopicMessageReceiverStrategy(MessageReceiverStrategy):
     async def subscribing_messages(self,
                                    client: ServiceBusClient,
                                    name: str,
                                    message_handler: Callable[[ServiceBusReceivedMessage], None],
                                    subscription_name: Optional[str] = None) -> None:
+        GET_CLIENT_MAX_WAIT_TIME = 5
+
         async with client.get_subscription_receiver(topic_name=name,
                                                     subscription_name=subscription_name,
-                                                    max_wait_time=5) as receiver:
+                                                    max_wait_time=GET_CLIENT_MAX_WAIT_TIME) as receiver:
             logging.info("Listening.. to topic")
             await self.process_messages(receiver, message_handler, "topic")

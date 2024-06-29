@@ -1,4 +1,4 @@
-from .auth import namespace_name, topic_name, subscription_name
+from .auth import connection_str, namespace_name, topic_name, subscription_name
 
 from .pubsub_utils import ServiceBusPublisher, ServiceBusSubscriber
 

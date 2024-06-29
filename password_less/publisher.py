@@ -2,24 +2,32 @@ import argparse
 import asyncio
 import logging
 
-# Azure
-from azure.identity.aio import DefaultAzureCredential
+from client import ServiceBusClientFactory
 from message import TopicMessageSenderStrategy
 
-# Customs
 from utils import (ServiceBusPublisher,
                    configure_logging,
                    namespace_name,
                    topic_name)
 
-publisher = ServiceBusPublisher(namespace=namespace_name(),
-                                queue_or_topic_name=topic_name(),
-                                strategy=TopicMessageSenderStrategy)
+# Connection String Based Publisher If It Set to True
+USE_CONNECTION_STR = False
+
+TOPIC = topic_name()
+NAMESPACE = namespace_name()
+
+PUBLISHER = ServiceBusPublisher(namespace=NAMESPACE,
+                                strategy=TopicMessageSenderStrategy,
+                                use_connection_str=USE_CONNECTION_STR)
 
 
 async def publish_message(message: str) -> None:
-    await publisher.send_message(message)
-    logging.info("Message was published successfully.")
+    await PUBLISHER.send_message(queue_or_topic_name=TOPIC,
+                                 message_content=message)
+    logging.info(f"Message was published successfully in the {TOPIC=}")
+
+    if isinstance(PUBLISHER.factory_object, ServiceBusClientFactory):
+        await PUBLISHER.factory_object._credential.close()
 
 
 def main():
