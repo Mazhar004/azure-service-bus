@@ -46,18 +46,6 @@ class MessageReceiverStrategy(ABC):
             await asyncio.sleep(PULLING_FREQUENCY_SECONDS)
 
 
-class QueueMessageReceiverStrategy(MessageReceiverStrategy):
-    async def subscribing_messages(self,
-                                   client: ServiceBusClient,
-                                   name: str,
-                                   message_handler: Callable[[ServiceBusReceivedMessage], None],
-                                   subscription_name: Optional[str] = None) -> None:
-        async with client.get_queue_receiver(queue_name=name,
-                                             max_wait_time=5) as receiver:
-            logging.info("Listening.. to queue")
-            await self.process_messages(receiver, message_handler, "queue")
-
-
 class TopicMessageReceiverStrategy(MessageReceiverStrategy):
     async def subscribing_messages(self,
                                    client: ServiceBusClient,
