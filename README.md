@@ -90,22 +90,17 @@ python subscriber.py
 - Create a `.env` file in the root of your project & insert your secrets [Sample Configuration](#configuration)
 
 ### Build Image
-- Subcriber
-    ```bash
-    docker build -t subscriber_tag_name .
-    ```
-- Publisher
-    ```bash
-    docker build -t publisher_tag_name . -f Dockerfile_Publisher
-    ```  
+```bash
+docker build -t pubsubapp .
+``` 
 ### Run Image
 - Subcriber
     ```bash
-    docker run subscriber_tag_name python subscriber.py
+    docker run pubsubapp python subscriber.py
     ```
 - Publisher
     ```bash
-    docker run publisher_tag_name python publisher.py --msg "your msg" --pubsub
+    docker run pubsubapp python publisher.py --msg "your msg" --pubsub
     ```  
 
 ## License
