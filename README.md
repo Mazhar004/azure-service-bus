@@ -23,15 +23,21 @@ git clone https://github.com/Mazhar004/azure-service-bus-pub-sub.git
 ### Configuration
 Create a `.env` file in the root of your project & insert your secrets. Here's an example:
 ```env
-FULLY_QUALIFIED_NAMESPACE = 'YOUR_SERVICE_BUS_NAME.servicebus.windows.net'
+FULLY_QUALIFIED_NAMESPACE=YOUR_SERVICE_BUS_NAME.servicebus.windows.net
 
 # Required Connection String Based Configuration
-CONNECTION_STR = ""
+CONNECTION_STR=
 
 # Required for Password Less Configuration
-AZURE_CLIENT_ID=""
-AZURE_CLIENT_SECRET=""
-AZURE_TENANT_ID=""
+AZURE_CLIENT_ID=
+AZURE_CLIENT_SECRET=
+AZURE_TENANT_ID=
+
+# Required for Publisher & Subscriber
+TOPIC_NAME=
+
+# Required for Subscriber Only
+SUBSCRIPTION_NAME=
 ```
 
 #### Virtual Environment Based Setup 
