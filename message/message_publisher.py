@@ -21,7 +21,7 @@ class MessageSenderStrategy(ABC):
 
     async def send_batch_message(self, sender: ServiceBusSender, message_list: List[str]) -> None:
         """Send a batch of messages."""
-        MAX_BATCH_SIZE = 256 * 1024
+        MAX_BATCH_SIZE = 256 * 1024 # 256KB
         async with sender:
             batch_message = await sender.create_message_batch(max_size_in_bytes=MAX_BATCH_SIZE)
 
@@ -46,8 +46,6 @@ class TopicMessageSenderStrategy(MessageSenderStrategy):
     async def send_message(self, client: ServiceBusClient, name: str, message_content: Union[str, List[str]]) -> None:
         """Send a message or a list of messages to a topic."""
         async with client.get_topic_sender(topic_name=name) as sender:
-            logging.info("Sending.. message to topic")
-
             if isinstance(message_content, List):
                 await self.send_batch_message(sender, message_content)
             else:

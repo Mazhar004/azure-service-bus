@@ -4,6 +4,15 @@ This project demonstrates how to use Azure Service Bus to `publish` and `subscri
 -  `connection_string_based`
 -   `passwordless authentication`.
 
+Azure Service Bus offers three `pricing tiers`. For this project, the `Premium` tier was selected due to its support for a maximum message size of `100MB`.
+- Different message size was published & subscribed `[1MB, 10MB, 95MB, 100MB]`
+
+### Azure Portal Service Bus - Message Published to a Topic
+<img src="docs/images/azure_portal_service_bus.png" alt="Azure Portal Service Bus - Message Published" style="max-width:80%;">
+
+### Terminal View - Message Subscribed
+<img src="docs/images/subscriber_terminal.png" alt="Terminal View - Message Subscribed" style="max-width:80%;">
+
 
 ## Getting Started
 
