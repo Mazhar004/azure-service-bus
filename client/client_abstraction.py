@@ -2,7 +2,7 @@ from typing import Dict
 
 from azure.identity.aio import DefaultAzureCredential
 from azure.servicebus.aio import ServiceBusClient
-
+from azure.servicebus import TransportType
 
 class ServiceBusClientFactory:
     _instances: Dict[str, ServiceBusClient] = {}
@@ -13,6 +13,7 @@ class ServiceBusClientFactory:
         if namespace not in ServiceBusClientFactory._instances:
             ServiceBusClientFactory._instances[namespace] = ServiceBusClient(fully_qualified_namespace=namespace,
                                                                              credential=ServiceBusClientFactory._credential,
+                                                                             transport_type=TransportType.AmqpOverWebsocket,
                                                                              logging_enable=True)
         return ServiceBusClientFactory._instances[namespace]
 
@@ -26,5 +27,6 @@ class ServiceBusClientFactoryString:
     async def get_client(self, namespace: str) -> ServiceBusClient:
         if namespace not in ServiceBusClientFactoryString._instances:
             ServiceBusClientFactoryString._instances[namespace] = ServiceBusClient.from_connection_string(conn_str=self.connection_str,
+                                                                                                          transport_type=TransportType.AmqpOverWebsocket,
                                                                                                           logging_enable=True)
         return ServiceBusClientFactoryString._instances[namespace]
