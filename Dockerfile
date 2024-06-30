@@ -1,42 +1,23 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.11-slim as builder
+FROM python:3.12-slim
 
-# Set the working directory in the builder stage
-WORKDIR /build
-
-# Copy the requirements file into the builder
-COPY requirements.txt .
-
-# Install the required Python packages
-RUN pip install --no-cache-dir --user -r requirements.txt
-
-# Start a new stage
-FROM python:3.11-slim
-
-# Install dumb-init and git
-RUN set -ex \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-    dumb-init \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+# PYTHONUNBUFFERED ensures that Python output is sent straight to terminal (i.e. your container log) without being first buffered and that you can see the output of your application (e.g., Django logs) in real time.
+ENV PYTHONUNBUFFERED=1
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the Python packages from the builder stage
-COPY --from=builder /root/.local /root/.local
-
-# Make sure scripts in .local are usable:
-ENV PATH=/root/.local:$PATH
-
 # Copy the application files into the container
-COPY client/ client/
-COPY message/ message/
-COPY utils/ utils/
-COPY subscriber.py .
-COPY .env .
+COPY . .
 
-RUN chmod +x subscriber.py
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["dumb-init"]
+# Set an environment variable to specify the path to the .env file
+ENV ENV_FILE_PATH=/app/.env
+
+# Ensure entrypoint.sh is executable
+RUN chmod +x /app/entrypoint.sh
+
+# Default command to run when starting the container
+ENTRYPOINT ["./entrypoint.sh"]
