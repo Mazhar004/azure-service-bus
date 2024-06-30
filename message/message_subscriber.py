@@ -20,8 +20,8 @@ class MessageReceiverStrategy(ABC):
                                message_handler: Callable[[ServiceBusReceivedMessage], None],
                                source: str) -> None:
         # Built-in Constants
-        MAX_MESSAGE_COUNT = 20
-        MAX_WAIT_TIME = 5
+        MAX_MESSAGE_COUNT = 20 # Maximum message fetch in a single request
+        MAX_WAIT_TIME = 10 # For bigger message size, it need to be increase
 
         # Custom Constants
         EMPTY_MESSAGES_THRESHOLD = 10
